@@ -9,10 +9,13 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-
+import useCurrentLoggedInUser from "../hooks/useCurrentLoggedInUser";
+import { useRouter } from "expo-router";
 const DashboardScreen = () => {
   // Animation for the header
   const headerOpacity = new Animated.Value(0);
+  const router = useRouter();
+  const currentLoggedInUser = useCurrentLoggedInUser();
 
   React.useEffect(() => {
     Animated.timing(headerOpacity, {
@@ -26,7 +29,9 @@ const DashboardScreen = () => {
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.header, { opacity: headerOpacity }]}>
-        <Text style={styles.headerText}>Welcome, John Doe</Text>
+        <Text style={styles.headerText}>
+          Welcome, {currentLoggedInUser.name}
+        </Text>
         <TouchableOpacity>
           <Ionicons name="ios-settings" size={24} color="#007bff" />
         </TouchableOpacity>
@@ -44,11 +49,15 @@ const DashboardScreen = () => {
           <View style={styles.cardContent}>
             <View style={styles.accountItem}>
               <Text style={styles.accountLabel}>Username:</Text>
-              <Text style={styles.accountValue}>JohnDoe</Text>
+              <Text style={styles.accountValue}>
+                {currentLoggedInUser.name}
+              </Text>
             </View>
             <View style={styles.accountItem}>
               <Text style={styles.accountLabel}>Email:</Text>
-              <Text style={styles.accountValue}>john.doe@example.com</Text>
+              <Text style={styles.accountValue}>
+                {currentLoggedInUser.email}
+              </Text>
             </View>
             {/* Add more account details as needed */}
           </View>
@@ -76,10 +85,16 @@ const DashboardScreen = () => {
 
       {/* Navigation */}
       <View style={styles.navigation}>
-        <TouchableOpacity style={styles.navButton}>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => router.push("PostCreationScreen")}
+        >
           <Text style={styles.navButtonText}>Create Post</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => router.push("profile")}
+        >
           <Text style={styles.navButtonText}>Profile Settings</Text>
         </TouchableOpacity>
         {/* Add more navigation options */}

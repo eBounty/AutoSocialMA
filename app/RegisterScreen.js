@@ -1,5 +1,12 @@
 import React, { memo, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
 import Header from "../components/Header";
@@ -12,11 +19,37 @@ import {
   passwordValidator,
   nameValidator,
 } from "../core/utils";
+import { auth, db } from "../firebase";
+import { useRouter } from "expo-router";
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState({ value: "", error: "" });
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
+
+  const [animating, setAnimating] = useState(false);
+
+  const router = useRouter();
+
+  const onSignup = async (values) => {
+    try {
+      const authUser = await auth.createUserWithEmailAndPassword(
+        values.email,
+        values.password
+      );
+
+      await db.collection("users").doc(authUser.user.email).set({
+        owner_uid: authUser.user.uid,
+        name: values.name,
+        email: authUser.user.email,
+      });
+
+      Alert.alert("Firebase sign up successful", values.email);
+      router.push("/LoginScreen");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    }
+  };
 
   const _onSignUpPressed = () => {
     const nameError = nameValidator(name.value);
@@ -30,7 +63,11 @@ const RegisterScreen = ({ navigation }) => {
       return;
     }
 
-    navigation.navigate("Dashboard");
+    onSignup({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+    });
   };
 
   return (
@@ -40,6 +77,12 @@ const RegisterScreen = ({ navigation }) => {
       <Logo />
 
       <Header>Create Account</Header>
+      <ActivityIndicator
+        animating={animating}
+        color="#bc2b78"
+        size="large"
+        style={styles.activityIndicator}
+      />
 
       <TextInput
         label="Name"
@@ -79,7 +122,7 @@ const RegisterScreen = ({ navigation }) => {
 
       <View style={styles.row}>
         <Text style={styles.label}>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+        <TouchableOpacity onPress={() => router.navigate("LoginScreen")}>
           <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>

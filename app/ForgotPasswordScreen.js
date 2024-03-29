@@ -8,9 +8,22 @@ import Header from "../components/Header";
 import TextInput from "../components/TextInput";
 import { theme } from "../core/theme";
 import Button from "../components/Button";
+import { useRouter } from "expo-router";
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState({ value: "", error: "" });
+  const router = useRouter();
+  const handlePasswordReset = async (values, actions) => {
+    const { email } = values;
+
+    try {
+      await passwordReset(email);
+      console.log("Password reset email sent successfully");
+      router.push("LoginScreen");
+    } catch (error) {
+      actions.setFieldError("general", error.message);
+    }
+  };
 
   const _onSendPressed = () => {
     const emailError = emailValidator(email.value);
@@ -19,8 +32,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
       setEmail({ ...email, error: emailError });
       return;
     }
-
-    navigation.navigate("LoginScreen");
+    handlePasswordReset(email);
   };
 
   return (

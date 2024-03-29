@@ -1,5 +1,12 @@
 import React, { memo, useState } from "react";
-import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
 import Header from "../components/Header";
@@ -8,10 +15,28 @@ import TextInput from "../components/TextInput";
 import BackButton from "../components/BackButton";
 import { theme } from "../core/theme";
 import { emailValidator, passwordValidator } from "../core/utils";
+import { auth } from "../firebase";
+import { useRouter } from "expo-router";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
+  const [animating, setAnimating] = useState(false);
+
+  const router = useRouter();
+
+  const onLogin = async (email, password) => {
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      setAnimating(false);
+      console.log("Firebase Login successfull", email, password);
+      router.push("/DashboardScreen");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      setAnimating(false);
+      console.log("Error", error.message);
+    }
+  };
 
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value);
@@ -23,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    navigation.navigate("Dashboard");
+    onLogin(email.value, password.value);
   };
 
   return (
@@ -33,7 +58,12 @@ const LoginScreen = ({ navigation }) => {
       <Logo />
 
       <Header>Welcome back.</Header>
-
+      <ActivityIndicator
+        animating={animating}
+        color="#bc2b78"
+        size="large"
+        style={styles.activityIndicator}
+      />
       <TextInput
         label="Email"
         returnKeyType="next"
@@ -59,7 +89,7 @@ const LoginScreen = ({ navigation }) => {
 
       <View style={styles.forgotPassword}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("ForgotPasswordScreen")}
+          onPress={() => router.navigate("ForgotPasswordScreen")}
         >
           <Text style={styles.label}>Forgot your password?</Text>
         </TouchableOpacity>
@@ -71,7 +101,7 @@ const LoginScreen = ({ navigation }) => {
 
       <View style={styles.row}>
         <Text style={styles.label}>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
+        <TouchableOpacity onPress={() => router.navigate("RegisterScreen")}>
           <Text style={styles.link}>Sign up</Text>
         </TouchableOpacity>
       </View>

@@ -8,6 +8,8 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { db } from "../firebase";
+import { useRouter } from "expo-router";
 
 const PostCreationScreen = () => {
   const [text, setText] = useState("");
@@ -15,23 +17,37 @@ const PostCreationScreen = () => {
   const [link, setLink] = useState("");
   const [targetAudience, setTargetAudience] = useState("");
   const [platform, setPlatform] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!text || !targetAudience || !platform) {
       Alert.alert("Error", "Please fill in all required fields.");
       return;
     }
-    // Perform post submission here
-    console.log("Post submitted:", {
-      text,
-      image,
-      link,
-      targetAudience,
-      platform,
-    });
-    // Optionally, you can navigate to another screen or show a success message
-    // navigation.navigate('PostSubmittedScreen');
-    // alert('Post submitted successfully!');
+
+    try {
+      // Create a new document in Firestore
+      const docRef = await db.collection("posts").add({
+        text,
+        image,
+        link,
+        targetAudience,
+        platform,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(), // Use server timestamp for creation time
+      });
+
+      console.log("Post created with ID:", docRef.id);
+
+      // Redirect to payment screen using navigation (replace with your navigation logic)
+      router.navigate("PaymentScreen", { postId: docRef.id }); // Pass post ID for payment processing
+      Alert.alert(
+        "Success",
+        "Your post has been created. Please proceed to payment."
+      );
+    } catch (error) {
+      console.error("Error adding document:", error);
+      Alert.alert("Error", "Failed to create post. Please try again.");
+    }
   };
 
   return (
