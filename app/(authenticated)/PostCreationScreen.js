@@ -8,8 +8,10 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import { useRouter } from "expo-router";
+import Colors from "../../constants/Colors";
+import { theme } from "../../core/theme";
 
 const PostCreationScreen = () => {
   const [text, setText] = useState("");
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
     color: "#555555",
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: theme.colors.secondary,
     paddingVertical: 15,
     borderRadius: 10,
   },

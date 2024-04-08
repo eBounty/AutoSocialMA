@@ -38,28 +38,12 @@ const UserProfileScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <View style={styles.statsContainer}>
-        <View style={styles.statsItem}>
-          <Text style={styles.statsNumber}>{user.followers}</Text>
-          <Text style={styles.statsLabel}>Followers</Text>
-        </View>
-        <View style={styles.statsItem}>
-          <Text style={styles.statsNumber}>{user.following}</Text>
-          <Text style={styles.statsLabel}>Following</Text>
-        </View>
-      </View>
-
       <View style={styles.membershipContainer}>
         <Text style={styles.membershipLabel}>Membership Level</Text>
         <View style={styles.membershipInfo}>
           <MaterialIcons name="star" size={24} color="#f39c12" />
           <Text style={styles.membershipLevel}>{user.membershipLevel}</Text>
         </View>
-      </View>
-
-      <View style={styles.bioContainer}>
-        <Text style={styles.bioLabel}>Bio</Text>
-        <Text style={styles.userBio}>{user.bio}</Text>
       </View>
 
       <View style={styles.socialContainer}>

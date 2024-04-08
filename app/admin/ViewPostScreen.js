@@ -9,8 +9,9 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { theme } from "../../core/theme";
 
-const PaymentScreen = ({ route, navigation }) => {
+const ViewPostScreen = ({ route, navigation }) => {
   // const { postDetails } = route.params; // Get post details from navigation params
   const postDetails = {
     text: "Check out our latest product!",
@@ -26,26 +27,9 @@ const PaymentScreen = ({ route, navigation }) => {
     duration: "3 days",
   };
 
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
-  const [cvv, setCVV] = useState("");
-
-  const handlePayment = () => {
-    if (!paymentMethod || !cardNumber || !expiryDate || !cvv) {
-      Alert.alert("Error", "Please fill in all required fields.");
-      return;
-    }
-    // Integrate with payment gateway and process payment
-    console.log("Payment processed successfully!");
-    // Optionally, navigate to a success screen or show a success message
-    // navigation.navigate('PaymentSuccessScreen');
-    // alert('Payment processed successfully!');
-  };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.heading}>Payment Details</Text>
+      <Text style={styles.heading}>Post Details</Text>
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Post Details</Text>
         <View style={styles.postDetails}>
@@ -92,38 +76,8 @@ const PaymentScreen = ({ route, navigation }) => {
         </View>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Payment Method</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Payment method"
-          onChangeText={(method) => setPaymentMethod(method)}
-          value={paymentMethod}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Card number"
-          onChangeText={(number) => setCardNumber(number)}
-          value={cardNumber}
-        />
-        <View style={styles.inlineInputs}>
-          <TextInput
-            style={[styles.input, styles.halfInput]}
-            placeholder="Expiry date"
-            onChangeText={(date) => setExpiryDate(date)}
-            value={expiryDate}
-          />
-          <TextInput
-            style={[styles.input, styles.halfInput]}
-            placeholder="CVV"
-            onChangeText={(cvv) => setCVV(cvv)}
-            value={cvv}
-          />
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.button} onPress={handlePayment}>
-        <Text style={styles.buttonText}>Proceed to Payment</Text>
+      <TouchableOpacity style={styles.button} onPress={() => null}>
+        <Text style={styles.buttonText}>Accept Post</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -179,7 +133,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: theme.colors.secondary,
     paddingVertical: 15,
     borderRadius: 10,
   },
@@ -190,4 +144,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaymentScreen;
+export default ViewPostScreen;

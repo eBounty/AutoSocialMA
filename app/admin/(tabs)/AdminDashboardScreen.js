@@ -66,6 +66,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: "#f0f0f0",
     padding: 20,
+    flex: 1,
+    padding: 20,
+    width: "100%",
+    maxWidth: "90%",
+    alignSelf: "center",
   },
   header: {
     flexDirection: "row",
