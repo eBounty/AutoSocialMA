@@ -10,9 +10,11 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../../core/theme";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
-const PaymentScreen = ({ route, navigation }) => {
-  // const { postDetails } = route.params; // Get post details from navigation params
+const PaymentScreen = () => {
+  const { postId } = useLocalSearchParams();
+  const router = useRouter();
   const postDetails = {
     text: "Check out our latest product!",
     image: "https://example.com/image.jpg",
@@ -27,21 +29,8 @@ const PaymentScreen = ({ route, navigation }) => {
     duration: "3 days",
   };
 
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
-  const [cvv, setCVV] = useState("");
-
   const handlePayment = () => {
-    if (!paymentMethod || !cardNumber || !expiryDate || !cvv) {
-      Alert.alert("Error", "Please fill in all required fields.");
-      return;
-    }
-    // Integrate with payment gateway and process payment
-    console.log("Payment processed successfully!");
-    // Optionally, navigate to a success screen or show a success message
-    // navigation.navigate('PaymentSuccessScreen');
-    // alert('Payment processed successfully!');
+    router.push("/payment");
   };
 
   return (

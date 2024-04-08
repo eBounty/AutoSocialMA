@@ -6,23 +6,28 @@ import {
   FontAwesome,
   Entypo,
 } from "@expo/vector-icons"; // Import icons
+import { useRouter } from "expo-router";
+import { auth } from "../../../firebase";
+import useCurrentLoggedInUser from "../../../hooks/useCurrentLoggedInUser";
+const UserProfileScreen = () => {
+  const router = useRouter();
+  const user1 = useCurrentLoggedInUser();
 
-const UserProfileScreen = ({ navigation }) => {
   const user = {
     name: "John Doe",
     email: "john.doe@example.com",
     profileImage: "https://placekitten.com/150/150", // Replace with the user's actual profile image
-    bio: "Passionate explorer of new technologies and avid learner.",
+
     membershipLevel: "Gold", // Example membership level
-    followers: 1200,
-    following: 800,
+
     twitter: "https://twitter.com/johndoe",
     linkedin: "https://www.linkedin.com/in/johndoe",
   };
 
   const handleLogout = () => {
     // Implement your logout logic here
-    navigation.navigate("Login"); // Navigate to the login screen after logout
+    auth.signOut();
+    router.navigate("LoginScreen"); // Navigate to the login screen after logout
   };
 
   return (
@@ -33,8 +38,8 @@ const UserProfileScreen = ({ navigation }) => {
           style={styles.profileImage}
         />
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>{user.name}</Text>
-          <Text style={styles.userEmail}>{user.email}</Text>
+          <Text style={styles.userName}>{user1.name}</Text>
+          <Text style={styles.userEmail}>{user1.email}</Text>
         </View>
       </View>
 

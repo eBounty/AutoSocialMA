@@ -42,6 +42,9 @@ const RegisterScreen = ({ navigation }) => {
         owner_uid: authUser.user.uid,
         name: values.name,
         email: authUser.user.email,
+        balance: 0,
+        membershipLevel: "Basic",
+        profileImage: "",
       });
 
       Alert.alert("Firebase sign up successful", values.email);

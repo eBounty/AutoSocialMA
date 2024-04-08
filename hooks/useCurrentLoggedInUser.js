@@ -19,6 +19,8 @@ const useCurrentLoggedInUser = () => {
             uid: doc.data().uid,
             name: doc.data().name,
             email: doc.data().email,
+            balance: doc.data().balance,
+            membershipLevel: doc.data().membershipLevel,
           });
         })
       );

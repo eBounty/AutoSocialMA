@@ -8,7 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { db } from "../../firebase";
+import { auth, db, firebase } from "../../firebase";
 import { useRouter } from "expo-router";
 import Colors from "../../constants/Colors";
 import { theme } from "../../core/theme";
@@ -29,14 +29,17 @@ const PostCreationScreen = () => {
 
     try {
       // Create a new document in Firestore
-      const docRef = await db.collection("posts").add({
-        text,
-        image,
-        link,
-        targetAudience,
-        platform,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(), // Use server timestamp for creation time
-      });
+      const docRef = await db
+        .collection("posts")
+        .doc(auth.currentUser.email)
+        .add({
+          text,
+          image,
+          link,
+          targetAudience,
+          platform,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(), // Use server timestamp for creation time
+        });
 
       console.log("Post created with ID:", docRef.id);
 

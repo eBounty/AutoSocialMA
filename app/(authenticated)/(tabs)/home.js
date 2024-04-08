@@ -3,6 +3,7 @@ import RoundBtn from "../../../components/RoundBtn";
 // import WidgetList from "../components/SortableList/WidgetList";
 import Colors from "../../../constants/Colors";
 import { defaultStyles } from "../../../constants/Styles";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -31,69 +32,73 @@ const Page = () => {
   const onAddMoney = () => router.push("/payment");
 
   return (
-    <ScrollView
-      style={{ backgroundColor: Colors.background }}
-      contentContainerStyle={{
-        paddingTop: headerHeight,
-      }}
-    >
-      <View style={styles.account}>
-        <View style={styles.row}>
-          <Text style={styles.balance}>{balance()}</Text>
-          <Text style={styles.currency}>€</Text>
-        </View>
-        <TouchableOpacity
-          style={[
-            defaultStyles.pillButtonSmall,
-            { backgroundColor: Colors.lightGray, marginVertical: 20 },
-          ]}
-        >
-          <Text style={[defaultStyles.buttonTextSmall, { color: Colors.dark }]}>
-            Accounts
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.actionRow}>
-        <RoundBtn icon={"add"} text={"Add money"} onPress={onAddMoney} />
-        <RoundBtn icon={"refresh"} text={"Post"} onPress={createPost} />
-        <RoundBtn icon={"list"} text={"Details"} />
-        {/* <Dropdown /> */}
-      </View>
-
-      <Text style={defaultStyles.sectionHeader}>Transactions</Text>
-      <View style={styles.transactions}>
-        {transactions.length === 0 && (
-          <Text style={{ padding: 14, color: Colors.gray }}>
-            No transactions yet
-          </Text>
-        )}
-        {transactions.map((transaction) => (
-          <View
-            key={transaction.id}
-            style={{ flexDirection: "row", alignItems: "center", gap: 16 }}
-          >
-            <View style={styles.circle}>
-              <Ionicons
-                name={transaction.amount > 0 ? "add" : "remove"}
-                size={24}
-                color={Colors.dark}
-              />
-            </View>
-
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontWeight: "400" }}>{transaction.title}</Text>
-              <Text style={{ color: Colors.gray, fontSize: 12 }}>
-                {transaction.date.toLocaleString()}
-              </Text>
-            </View>
-            <Text>{transaction.amount}€</Text>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ScrollView
+        style={{ backgroundColor: Colors.background }}
+        contentContainerStyle={{
+          paddingTop: headerHeight,
+        }}
+      >
+        <View style={styles.account}>
+          <View style={styles.row}>
+            <Text style={styles.balance}>{balance()}</Text>
+            <Text style={styles.currency}>€</Text>
           </View>
-        ))}
-      </View>
-      <Text style={defaultStyles.sectionHeader}>Widgets</Text>
-      {/* <WidgetList /> */}
-    </ScrollView>
+          <TouchableOpacity
+            style={[
+              defaultStyles.pillButtonSmall,
+              { backgroundColor: Colors.lightGray, marginVertical: 20 },
+            ]}
+          >
+            <Text
+              style={[defaultStyles.buttonTextSmall, { color: Colors.dark }]}
+            >
+              Accounts
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.actionRow}>
+          <RoundBtn icon={"add"} text={"Add money"} onPress={onAddMoney} />
+          <RoundBtn icon={"refresh"} text={"Post"} onPress={createPost} />
+          <RoundBtn icon={"list"} text={"Details"} />
+          {/* <Dropdown /> */}
+        </View>
+
+        <Text style={defaultStyles.sectionHeader}>Transactions</Text>
+        <View style={styles.transactions}>
+          {transactions.length === 0 && (
+            <Text style={{ padding: 14, color: Colors.gray }}>
+              No transactions yet
+            </Text>
+          )}
+          {transactions.map((transaction) => (
+            <View
+              key={transaction.id}
+              style={{ flexDirection: "row", alignItems: "center", gap: 16 }}
+            >
+              <View style={styles.circle}>
+                <Ionicons
+                  name={transaction.amount > 0 ? "add" : "remove"}
+                  size={24}
+                  color={Colors.dark}
+                />
+              </View>
+
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontWeight: "400" }}>{transaction.title}</Text>
+                <Text style={{ color: Colors.gray, fontSize: 12 }}>
+                  {transaction.date.toLocaleString()}
+                </Text>
+              </View>
+              <Text>{transaction.amount}€</Text>
+            </View>
+          ))}
+        </View>
+        <Text style={defaultStyles.sectionHeader}>Widgets</Text>
+        {/* <WidgetList /> */}
+      </ScrollView>
+    </GestureHandlerRootView>
   );
 };
 const styles = StyleSheet.create({
