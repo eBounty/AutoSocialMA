@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,11 +11,12 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { theme } from "../../core/theme";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { db } from "../../firebase";
 
 const PaymentScreen = () => {
   const { postId } = useLocalSearchParams();
   const router = useRouter();
-  const postDetails = {
+  const [postDetails, setPostDetails] = useState({
     text: "Check out our latest product!",
     image: "https://example.com/image.jpg",
     link: "https://example.com/product",
@@ -27,7 +28,16 @@ const PaymentScreen = () => {
     scheduleTime: "10:00 AM",
     budget: 1000, // Amount in USD
     duration: "3 days",
-  };
+  });
+
+  useEffect(() => {
+    try {
+      const data = db.collection("posts").doc(postId).get();
+      setPostDetails(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [postDetails]);
 
   const handlePayment = () => {
     router.push("/payment");
@@ -35,9 +45,9 @@ const PaymentScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.heading}>Payment Details</Text>
+      <Text style={styles.heading}>Post Details</Text>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Post Details</Text>
+        <Text style={styles.cardTitle}>Information</Text>
         <View style={styles.postDetails}>
           <Text style={styles.detailLabel}>Text:</Text>
           <Text style={styles.detailValue}>{postDetails.text}</Text>

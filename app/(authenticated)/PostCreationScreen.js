@@ -6,12 +6,15 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Button,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { auth, db, firebase } from "../../firebase";
 import { useRouter } from "expo-router";
 import Colors from "../../constants/Colors";
 import { theme } from "../../core/theme";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Slider from "@react-native-community/slider";
 
 const PostCreationScreen = () => {
   const [text, setText] = useState("");
@@ -19,6 +22,14 @@ const PostCreationScreen = () => {
   const [link, setLink] = useState("");
   const [targetAudience, setTargetAudience] = useState("");
   const [platform, setPlatform] = useState("");
+  const [budget, setBudget] = useState("");
+  const [duration, setDuration] = useState("");
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [mentions, setMentions] = useState("");
+
   const router = useRouter();
 
   const handleSubmit = async () => {
@@ -29,22 +40,20 @@ const PostCreationScreen = () => {
 
     try {
       // Create a new document in Firestore
-      const docRef = await db
-        .collection("posts")
-        .doc(auth.currentUser.email)
-        .add({
-          text,
-          image,
-          link,
-          targetAudience,
-          platform,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(), // Use server timestamp for creation time
-        });
+      const docRef = await db.collection("posts").add({
+        text,
+        image,
+        link,
+        targetAudience,
+        platform,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(), // Use server timestamp for creation time
+      });
 
       console.log("Post created with ID:", docRef.id);
 
       // Redirect to payment screen using navigation (replace with your navigation logic)
       router.navigate("PaymentScreen", { postId: docRef.id }); // Pass post ID for payment processing
+      // router.navigate("PaymentScreen", { postId: "3636" }); // Pass post ID for payment processing
       Alert.alert(
         "Success",
         "Your post has been created. Please proceed to payment."
@@ -53,6 +62,25 @@ const PostCreationScreen = () => {
       console.error("Error adding document:", error);
       Alert.alert("Error", "Failed to create post. Please try again.");
     }
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
   };
 
   return (
@@ -89,6 +117,56 @@ const PostCreationScreen = () => {
         onChangeText={(platform) => setPlatform(platform)}
         value={platform}
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter hashtags"
+        onChangeText={(platform) => setPlatform(platform)}
+        value={platform}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter mentions"
+        onChangeText={(mentions) => setMentions(mentions)}
+        value={mentions}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Budget"
+        onChangeText={(budget) => setBudget(budget)}
+        value={budget}
+      />
+      <Button
+        onPress={showDatepicker}
+        title="Schedule Date"
+        color={theme.colors.secondary}
+      />
+      <Button
+        onPress={showTimepicker}
+        title="Schedule Time"
+        color={theme.colors.secondary}
+      />
+      <Text>selected: {date.toLocaleString()}</Text>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          onChange={(date) => setDate(date)}
+        />
+      )}
+      <Text>Duration: {duration}</Text>
+      <Slider
+        style={{ width: 300, height: 40 }}
+        minimumValue={1}
+        maximumValue={100}
+        step={1}
+        minimumTrackTintColor="green"
+        maximumTrackTintColor="#000000"
+        value={duration}
+        onValueChange={(duration) => setDuration(duration)}
+      />
+
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Submit Post</Text>
       </TouchableOpacity>

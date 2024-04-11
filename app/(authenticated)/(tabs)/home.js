@@ -1,4 +1,4 @@
-// import Dropdown from "@/components/Dropdown";
+import Dropdown from "../../../components/Dropdown";
 import RoundBtn from "../../../components/RoundBtn";
 // import WidgetList from "../components/SortableList/WidgetList";
 import Colors from "../../../constants/Colors";
@@ -31,6 +31,46 @@ const Page = () => {
 
   const onAddMoney = () => router.push("/payment");
 
+  const transactions1 = [
+    {
+      id: 1, // Unique identifier for each transaction
+      title: "Salary Post",
+      amount: 2000, // Positive for income
+      date: new Date(2024, 3, 9), // April 9, 2024 (adjust as needed)
+    },
+    {
+      id: 2,
+      title: "Grocery Shopping",
+      amount: -50.75, // Negative for expense
+      date: new Date(2024, 3, 8), // April 8, 2024
+    },
+    {
+      id: 3,
+      title: "Movie Ticket",
+      amount: -12.5, // Negative for expense
+      date: new Date(2024, 3, 6), // April 6, 2024
+    },
+    {
+      id: 1, // Unique identifier for each transaction
+      title: "Salary Post",
+      amount: 2000, // Positive for income
+      date: new Date(2024, 3, 9), // April 9, 2024 (adjust as needed)
+    },
+    {
+      id: 2,
+      title: "Grocery Shopping Post",
+      amount: -50.75, // Negative for expense
+      date: new Date(2024, 3, 8), // April 8, 2024
+    },
+    {
+      id: 3,
+      title: "Movie Ticket",
+      amount: -12.5, // Negative for expense
+      date: new Date(2024, 3, 6), // April 6, 2024
+    },
+    // Add more transactions as needed
+  ];
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ScrollView
@@ -42,7 +82,7 @@ const Page = () => {
         <View style={styles.account}>
           <View style={styles.row}>
             <Text style={styles.balance}>{balance()}</Text>
-            <Text style={styles.currency}>€</Text>
+            <Text style={styles.currency}>$</Text>
           </View>
           <TouchableOpacity
             style={[
@@ -60,19 +100,23 @@ const Page = () => {
 
         <View style={styles.actionRow}>
           <RoundBtn icon={"add"} text={"Add money"} onPress={onAddMoney} />
-          <RoundBtn icon={"refresh"} text={"Post"} onPress={createPost} />
-          <RoundBtn icon={"list"} text={"Details"} />
+          <RoundBtn
+            icon={"create-outline"}
+            text={"Post"}
+            onPress={createPost}
+          />
+          <RoundBtn icon={"list"} text={"Post History"} />
           {/* <Dropdown /> */}
         </View>
 
         <Text style={defaultStyles.sectionHeader}>Transactions</Text>
         <View style={styles.transactions}>
-          {transactions.length === 0 && (
+          {transactions1.length === 0 && (
             <Text style={{ padding: 14, color: Colors.gray }}>
               No transactions yet
             </Text>
           )}
-          {transactions.map((transaction) => (
+          {transactions1.map((transaction) => (
             <View
               key={transaction.id}
               style={{ flexDirection: "row", alignItems: "center", gap: 16 }}
@@ -91,7 +135,7 @@ const Page = () => {
                   {transaction.date.toLocaleString()}
                 </Text>
               </View>
-              <Text>{transaction.amount}€</Text>
+              <Text>{transaction.amount}$</Text>
             </View>
           ))}
         </View>

@@ -23,7 +23,7 @@ const CustomHeader = () => {
           },
         ]}
       >
-        <Link href={"/(authenticated)/(modals)/account"} asChild>
+        <Link href={"/(authenticated)/(tabs)/profile"} asChild>
           <TouchableOpacity
             style={{
               width: 40,
@@ -59,7 +59,11 @@ const CustomHeader = () => {
           onPress={() => router.navigate("/(authenticated)/notifications")}
         >
           <View style={styles.circle}>
-            <Ionicons name={"bell"} size={20} color={Colors.dark} />
+            <Ionicons
+              name="notifications-circle-outline"
+              size={20}
+              color={Colors.dark}
+            />
           </View>
         </TouchableOpacity>
       </View>
