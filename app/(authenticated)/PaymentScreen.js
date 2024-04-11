@@ -32,10 +32,14 @@ const PaymentScreen = () => {
 
   useEffect(() => {
     try {
-      const data = db.collection("posts").doc(postId).get();
-      setPostDetails(data);
+      const postDetails = db.collection("posts").doc(postId).get();
+      if (postDetails.exists) {
+        setPostDetails(postDetails.data());
+      } else {
+        console.log("No such document!");
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching invoice data:", error);
     }
   }, [postDetails]);
 
