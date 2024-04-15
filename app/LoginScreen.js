@@ -28,9 +28,9 @@ const LoginScreen = ({ navigation }) => {
   const onLogin = async (email, password) => {
     try {
       await auth.signInWithEmailAndPassword(email, password);
-      setAnimating(false);
+      setAnimating(true);
       console.log("Firebase Login successfull", email, password);
-      router.push("/(authenticated)/(tabs)/hme");
+      router.push("/(authenticated)/(tabs)/home");
     } catch (error) {
       Alert.alert("Error", error.message);
       setAnimating(false);

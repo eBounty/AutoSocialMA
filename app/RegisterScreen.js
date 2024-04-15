@@ -26,17 +26,24 @@ const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState({ value: "", error: "" });
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
+  const [cPassword, setCPassword] = useState({ value: "", error: "" });
 
   const [animating, setAnimating] = useState(false);
 
   const router = useRouter();
 
   const onSignup = async (values) => {
+    if (values.password !== values.cPassword) {
+      setAnimating(false);
+      Alert.alert("Please your password does not match");
+      return;
+    }
     try {
       const authUser = await auth.createUserWithEmailAndPassword(
         values.email,
         values.password
       );
+      setAnimating(true);
 
       await db.collection("users").doc(authUser.user.email).set({
         owner_uid: authUser.user.uid,
@@ -47,7 +54,7 @@ const RegisterScreen = ({ navigation }) => {
         profileImage: "",
       });
 
-      Alert.alert("Firebase sign up successful", values.email);
+      Alert.alert("sign up successful", values.email);
       router.push("/LoginScreen");
     } catch (error) {
       Alert.alert("Error", error.message);
@@ -70,6 +77,7 @@ const RegisterScreen = ({ navigation }) => {
       name: name.value,
       email: email.value,
       password: password.value,
+      cPassword: cPassword.value,
     });
   };
 
@@ -122,10 +130,10 @@ const RegisterScreen = ({ navigation }) => {
       <TextInput
         label="Confirm Password"
         returnKeyType="done"
-        value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: "" })}
-        error={!!password.error}
-        errorText={password.error}
+        value={cPassword.value}
+        onChangeText={(text) => setCPassword({ value: text, error: "" })}
+        error={!!cPassword.error}
+        errorText={cPassword.error}
         secureTextEntry
       />
 
